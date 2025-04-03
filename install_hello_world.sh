@@ -18,11 +18,6 @@ echo "🗑️ Removing '/usr/bin/forge'..."
 rm /usr/bin/forge
 sleep 5
 
-# Update PATH environment variable to include Foundry
-echo "🔄 Updating PATH to include Foundry..."
-export PATH="/root/.foundry/bin:$PATH"
-sleep 5
-
 # Install the 'infernet-sdk' dependency using forge
 echo "⬇️ Installing infernet-sdk dependency..."
 forge install --no-commit ritual-net/infernet-sdk

@@ -31,15 +31,6 @@ install hte requirement
 ``` chmod +x requirement.sh && /.requirement
 ```
 
-generate the config files 
-```
-tmux new-session -s node
-
-project=hello-world make deploy-container
-
-de attach the tmux and ignore all of the error 
-```
-
 
 //config 3 file 
 //nano ~/infernet-container-starter/deploy/config.json

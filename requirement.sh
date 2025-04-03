@@ -85,3 +85,4 @@ advise_logout
 
 # Run Foundry installation and updates
 install_foundry
+

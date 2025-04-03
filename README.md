@@ -31,21 +31,14 @@ install hte requirement
 ``` chmod +x requirement.sh && /.requirement
 ```
 
+generate the config files 
+```
+tmux new-session -s node
 
+project=hello-world make deploy-container
 
-
-
-
-
-
-
-
-
-
-
-
-
-// the firs session running to creat the config files
+de attach the tmux and ignore all of the error 
+```
 
 
 //config 3 file 

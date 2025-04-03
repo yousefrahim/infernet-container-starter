@@ -17,3 +17,16 @@ model to infernet. Using this example will make it easier for you to deploy your
 LLM model using [Huggingface's TGI](https://huggingface.co/docs/text-generation-inference/en/index), and use it with an Infernet Node.
 6. [Running OpenAI's GPT-4 on Infernet](projects/gpt4/gpt4.md): This example shows you how to deploy OpenAI's GPT-4 model
 to infernet.
+
+
+
+______________________________________________________________________________________________________________________________________________
+lets dice into ruunig it 
+
+git  clone https://github.com/ritual-net/infernet-container-starter.git && cd infernet-container-starter
+
+
+chmod +x install_dependencies.sh && sudo ./install_dependencies.sh
+
+:x
+

@@ -56,6 +56,8 @@ advise_logout() {
 # Main script execution starts here
 check_root
 
+sudo apt install make
+
 log_message "Starting the installation of dependencies..."
 
 # Run the installation

@@ -20,13 +20,54 @@ to infernet.
 
 
 
-______________________________________________________________________________________________________________________________________________
-lets dice into ruunig it 
+______________________________________________________________________________________________________________________
 
-git  clone https://github.com/ritual-net/infernet-container-starter.git && cd infernet-container-starter
+git clone 
+```
+https://github.com/0xHawre/infernet-container-starter.git && cd Owner avatar
+infernet-container-starter
+```
+install hte requirement 
+``` chmod +x requirement.sh && /.requirement
+```
 
 
-chmod +x install_dependencies.sh && sudo ./install_dependencies.sh
 
-:x
 
+
+
+
+
+
+
+
+
+
+
+
+// the firs session running to creat the config files
+
+
+//config 3 file 
+//nano ~/infernet-container-starter/deploy/config.json
+//nano ~/infernet-container-starter/projects/hello-world/container/config.json
+//nano ~/infernet-container-starter/projects/hello-world/contracts/Makefile pv key 
+{
+    suff that have to be change {
+        RPC URL: https://mainnet.base.org/
+        Private Key: Enter your private key (throwaway wallet). Add “0x” to your key if it does not start with 0x.
+        rig address=. 0x3B1554f346DFe5c482Bb4BA31b880c1C18412170
+            "snapshot_sync": {
+        "sleep": 3,
+        "starting_sub_id": 160000,
+        "batch_size": 800,
+        "sync_period": 30
+    },
+    delet the docker settein in the script 
+    cahnge the "trail_head_blocks": 3
+
+    }
+
+}
+
+// edit nano ~/infernet-container-starter/deploy/docker-compose.yaml node version 

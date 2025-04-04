@@ -22,36 +22,30 @@ to infernet.
 
 ______________________________________________________________________________________________________________________
 
-git clone 
+
+
+
 ```
-https://github.com/0xHawre/infernet-container-starter.git && cd Owner avatar
-infernet-container-starter
-```
-install hte requirement 
-``` chmod +x requirement.sh && /.requirement
+git clone https://github.com/0xHawre/infernet-container-starter.git && cd infernet-container-starter 
 ```
 
+```
+chmod +x setup.sh && ./setup.sh
+```
 
-//config 3 file 
-//nano ~/infernet-container-starter/deploy/config.json
-//nano ~/infernet-container-starter/projects/hello-world/container/config.json
-//nano ~/infernet-container-starter/projects/hello-world/contracts/Makefile pv key 
-{
-    suff that have to be change {
-        RPC URL: https://mainnet.base.org/
-        Private Key: Enter your private key (throwaway wallet). Add “0x” to your key if it does not start with 0x.
-        rig address=. 0x3B1554f346DFe5c482Bb4BA31b880c1C18412170
-            "snapshot_sync": {
-        "sleep": 3,
-        "starting_sub_id": 160000,
-        "batch_size": 800,
-        "sync_period": 30
-    },
-    delet the docker settein in the script 
-    cahnge the "trail_head_blocks": 3
+an script that ask for the pc key and replace them into files that have to be edited 
 
-    }
 
-}
+nano ~/infernet-container-starter/deploy/config.json || add the pc key to this file 
 
-// edit nano ~/infernet-container-starter/deploy/docker-compose.yaml node version 
+nano ~/infernet-container-starter/projects/hello-world/contracts/Makefile ||Update sender’s address with your private key && Change RPC_URL to https://mainnet.base.org/
+
+
+
+nano ~/infernet-container-starter/deploy/docker-compose.yaml || edit the node veriosn 
+
+pull the docker contaners up 
+
+write a depoly script +  contrract call back  script 
+
+

@@ -3,7 +3,7 @@
 
 # anvil's third default address
 sender := 0xpv-key
-RPC_URL := 0x3B1554f346DFe5c482Bb4BA31b880c1C18412170
+RPC_URL := https://mainnet.base.org/
 
 # deploying the contract
 deploy:

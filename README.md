@@ -16,6 +16,12 @@ cd infernet-container-starter
 chmod +x setup.sh
 ./setup.sh
 ```
+#### reload shell
+```bash
+source /root/.bashrc && ./setup.sh
+or
+source /root/.zshrc && ./setup.sh
+```
 
 #### 2.2 Make and Run `pvkey.sh`
 

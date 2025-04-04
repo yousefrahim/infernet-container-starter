@@ -10,7 +10,7 @@
 # ==============================================================================
  
 # Exit immediately if any command fails
-set -e
+
 
 # ------------------------------------------------------------------------------
 # System Update & Upgrade
@@ -94,21 +94,9 @@ sleep 10
 
 # Reload shell configuration based on the current shell (bash or zsh)
 
-if [ -n "$BASH_VERSION" ]; then
-    echo "Reloading Bash configuration..."
-    source ~/.bashrc
-    # Wait 5 seconds before restarting Bash
-    sleep 5
-    echo "Restarting Bash shell..."
-    exec bash
-elif [ -n "$ZSH_VERSION" ]; then
-    echo "Reloading Zsh configuration..."
-    source ~/.zshrc
-    # Wait 5 seconds before restarting Zsh
-    sleep 5
-    echo "Restarting Zsh shell..."
-    exec zsh
-fi
+source ~/.bashrc
+sleep 5 
+source ~/.zshrc
 
 # Update Foundry (foundryup ensures you have the latest version)
 echo "Updating Foundry..."

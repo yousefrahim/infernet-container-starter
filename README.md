@@ -1,3 +1,62 @@
+
+### Step 1: Clone the Repository and Navigate In
+
+```bash
+git clone https://github.com/0xHawre/infernet-container-starter.git
+cd infernet-container-starter
+```
+
+---
+
+### Step 2: Run the Setup Scripts
+
+#### 2.1 Make and Run `setup.sh`
+
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+
+#### 2.2 Make and Run `pvkey.sh`
+
+```bash
+chmod +x pvkey.sh
+./pvkey.sh
+```
+
+#### 2.3 Make and Run `deploy.sh`
+
+```bash
+chmod +x deploy.sh
+./deploy.sh
+```
+
+---
+
+### Step 3: Deploy Contracts for the Hello World Project
+
+```bash
+project=hello-world make deploy-contracts
+```
+
+---
+## Congratulations! 
+
+### Call Contract
+```bash 
+nano ~/infernet-container-starter/projects/hello-world/contracts/script/CallContract.s.sol
+```
+Edit your CallContract.s.sol file by inserting the new contract address. The preconfigured address is SaysGM saysGm = SaysGM(youre contract address), change it to the address that was generated when calling SaysGM
+
+Switch back to your second terminal session and initiate a new request for the Infernet Node:
+```bash 
+project=hello-world make call-contract
+```
+
+check base scan: https://basescan.org/
+
+
+
 # infernet-container-starter
 
 Welcome to this repository! 🎉 This repo contains a series of examples that demonstrate
@@ -21,31 +80,5 @@ to infernet.
 
 
 ______________________________________________________________________________________________________________________
-
-
-
-
-```
-git clone https://github.com/0xHawre/infernet-container-starter.git && cd infernet-container-starter 
-```
-
-```
-chmod +x setup.sh && ./setup.sh
-```
-
-an script that ask for the pc key and replace them into files that have to be edited 
-
-
-nano ~/infernet-container-starter/deploy/config.json || add the pc key to this file 
-
-
-
-
-
-nano ~/infernet-container-starter/deploy/docker-compose.yaml || edit the node veriosn 
-
-pull the docker contaners up 
-
-write a depoly script +  contrract call back  script 
 
 

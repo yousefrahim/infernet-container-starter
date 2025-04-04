@@ -4,6 +4,8 @@
 # Docker Compose), and Foundry for smart contract development. It uses
 # screen (instead of tmux) as the terminal multiplexer.
 #
+# It also updates the smart contract libraries for the Hello World project.
+#
 # Run this script as your regular user. Some commands require sudo privileges.
 # ==============================================================================
  
@@ -19,7 +21,7 @@ sudo apt update && sudo apt upgrade -y
 # ------------------------------------------------------------------------------
 # Install Basic Utilities
 # ------------------------------------------------------------------------------
-# Here we install required utilities: curl, git, jq, lz4, build-essential, and screen.
+# Install required utilities: curl, git, jq, lz4, build-essential, and screen.
 echo "Installing required utilities (curl, git, jq, lz4, build-essential, screen)..."
 sudo apt install -y curl git jq lz4 build-essential screen
 
@@ -103,4 +105,30 @@ fi
 echo "Updating Foundry..."
 foundryup
 
+# ------------------------------------------------------------------------------
+# Update Smart Contract Libraries for Hello World Project
+# ------------------------------------------------------------------------------
+echo "Updating smart contract libraries for the Hello World project..."
+
+# Navigate to the contracts library directory
+cd ~/infernet-container-starter/projects/hello-world/contracts/lib
+
+# Ensure the Foundry binaries are in PATH
+export PATH="/root/.foundry/bin:$PATH"
+
+# Remove the existing forge-std and infernet-sdk directories
+echo "Removing existing forge-std and infernet-sdk directories..."
+rm -rf forge-std infernet-sdk
+
+# Reinstall forge-std library
+echo "Installing forge-std library..."
+forge install --no-commit foundry-rs/forge-std
+
+# Reinstall infernet-sdk library
+echo "Installing infernet-sdk library..."
+forge install --no-commit ritual-net/infernet-sdk
+
+echo "Smart contract library update complete!"
+
 echo "All installations and setups are complete!"
+

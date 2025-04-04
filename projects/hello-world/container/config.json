@@ -14,7 +14,7 @@
         "registry_address": "0x3B1554f346DFe5c482Bb4BA31b880c1C18412170",
         "wallet": {
           "max_gas_limit": 4000000,
-          "private_key": "0xpv-key",
+          "private_key": "",
           "allowed_sim_errors": []
         },
         "snapshot_sync": {

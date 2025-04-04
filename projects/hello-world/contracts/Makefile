@@ -2,7 +2,7 @@
 .phony: deploy
 
 # anvil's third default address
-sender := 0xpv-key
+sender := 
 RPC_URL := https://mainnet.base.org/
 
 # deploying the contract

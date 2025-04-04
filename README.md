@@ -38,7 +38,7 @@ an script that ask for the pc key and replace them into files that have to be ed
 
 nano ~/infernet-container-starter/deploy/config.json || add the pc key to this file 
 
-nano ~/infernet-container-starter/projects/hello-world/contracts/Makefile ||Update sender’s address with your private key && Change RPC_URL to https://mainnet.base.org/
+
 
 
 

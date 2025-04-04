@@ -1,88 +1,106 @@
 #!/bin/bash
+# ==============================================================================
+# This script updates the system, installs essential utilities, Docker (with
+# Docker Compose), and Foundry for smart contract development. It uses
+# screen (instead of tmux) as the terminal multiplexer.
+#
+# Run this script as your regular user. Some commands require sudo privileges.
+# ==============================================================================
+ 
+# Exit immediately if any command fails
+set -e
 
-set -e  # Exit immediately if a command fails
-set -o pipefail  # Exit if any command in a pipeline fails
+# ------------------------------------------------------------------------------
+# System Update & Upgrade
+# ------------------------------------------------------------------------------
+echo "Updating and upgrading system packages..."
+sudo apt update && sudo apt upgrade -y
 
-LOG_FILE="/var/log/install_dependencies.log"
-exec > >(tee -a $LOG_FILE) 2>&1
+# ------------------------------------------------------------------------------
+# Install Basic Utilities
+# ------------------------------------------------------------------------------
+# Here we install required utilities: curl, git, jq, lz4, build-essential, and screen.
+echo "Installing required utilities (curl, git, jq, lz4, build-essential, screen)..."
+sudo apt install -y curl git jq lz4 build-essential screen
 
-check_root() {
-  if [ "$(id -u)" -ne 0 ]; then
-    echo "[ERROR] This script must be run as root. Please run with sudo or as root." >&2
-    exit 1
-  fi
-}
+# ------------------------------------------------------------------------------
+# Install Prerequisites for Docker
+# ------------------------------------------------------------------------------
+echo "Installing prerequisites for Docker (ca-certificates, curl, gnupg, lsb-release)..."
+sudo apt install -y ca-certificates curl gnupg lsb-release
 
-log_message() {
-  local message="$1"
-  echo "[INFO] $(date '+%Y-%m-%d %H:%M:%S') - $message"
-}
+# ------------------------------------------------------------------------------
+# Add Docker's Official GPG Key and Setup Repository
+# ------------------------------------------------------------------------------
+echo "Adding Docker's official GPG key..."
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 
-error_exit() {
-  echo "[ERROR] $1" >&2
-  exit 1
-}
+echo "Setting up the Docker repository..."
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | \
+sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-install_dependencies() {
-  log_message "Updating and upgrading the system..."
-  sudo apt update && sudo apt upgrade -y || error_exit "Failed to update system."
+# ------------------------------------------------------------------------------
+# Update Package List (including Docker repo)
+# ------------------------------------------------------------------------------
+echo "Updating package list with Docker repository..."
+sudo apt update
 
-  log_message "Installing essential packages..."
-  sudo apt -qy install curl git jq lz4 build-essential tmux || error_exit "Failed to install essential packages."
+# ------------------------------------------------------------------------------
+# Install Docker Engine and Related Components
+# ------------------------------------------------------------------------------
+echo "Installing Docker Engine and related packages..."
+sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-  log_message "Installing Docker..."
-  sudo apt install -y docker.io || error_exit "Failed to install Docker."
+# ------------------------------------------------------------------------------
+# Add Current User to Docker Group
+# ------------------------------------------------------------------------------
+echo "Adding user '$USER' to the docker group (for running Docker without sudo)..."
+sudo usermod -aG docker "$USER"
 
-  log_message "Installing Docker Compose..."
-  sudo curl -L "https://github.com/docker/compose/releases/download/v2.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose || error_exit "Failed to download Docker Compose."
-  sudo chmod +x /usr/local/bin/docker-compose || error_exit "Failed to set executable permissions for Docker Compose."
+echo "Docker installation complete!"
+echo "Please log out and back in (or run 'newgrp docker') to apply group changes."
 
-  log_message "Setting up Docker Compose CLI plugin..."
-  DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
-  mkdir -p "$DOCKER_CONFIG/cli-plugins"
-  curl -SL "https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-linux-x86_64" -o "$DOCKER_CONFIG/cli-plugins/docker-compose" || error_exit "Failed to download Docker Compose plugin."
-  chmod +x "$DOCKER_CONFIG/cli-plugins/docker-compose" || error_exit "Failed to set permissions for Docker Compose plugin."
+# ------------------------------------------------------------------------------
+# Install Docker Compose (Standalone Binary)
+# ------------------------------------------------------------------------------
+echo "Installing Docker Compose standalone binary..."
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.29.2/docker-compose-$(uname -s)-$(uname -m)" \
+  -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 
-  log_message "Verifying Docker Compose version..."
-  docker compose version || error_exit "Docker Compose installation verification failed."
+# ------------------------------------------------------------------------------
+# Alternatively, Setup Docker Compose as a CLI Plugin
+# ------------------------------------------------------------------------------
+echo "Setting up Docker Compose as a CLI plugin..."
+DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+mkdir -p "$DOCKER_CONFIG/cli-plugins"
+curl -SL "https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-linux-x86_64" \
+  -o "$DOCKER_CONFIG/cli-plugins/docker-compose"
+chmod +x "$DOCKER_CONFIG/cli-plugins/docker-compose"
 
-  log_message "Adding user to Docker group..."
-  sudo usermod -aG docker $USER || error_exit "Failed to add user to Docker group."
+# ------------------------------------------------------------------------------
+# Install Foundry (Smart Contract Development Tool)
+# ------------------------------------------------------------------------------
+echo "Installing Foundry..."
+curl -L https://foundry.paradigm.xyz | bash
 
-  log_message "Installation complete!"
-}
+# Pause briefly to allow Foundry installation to complete
+echo "Waiting for Foundry installation to complete..."
+sleep 10
 
-advise_logout() {
-  log_message "To apply Docker group changes, please log out and log back in or restart your machine."
-}
+# Reload shell configuration based on the current shell (bash or zsh)
+if [ -n "$BASH_VERSION" ]; then
+    echo "Reloading bash configuration..."
+    source ~/.bashrc
+elif [ -n "$ZSH_VERSION" ]; then
+    echo "Reloading zsh configuration..."
+    source ~/.zshrc
+fi
 
-# New commands to install Forge and Infernet SDK
-install_foundry() {
-  log_message "Navigating to contracts directory..."
-  cd ~/infernet-container-starter/projects/hello-world/contracts || error_exit "Failed to change directory to contracts."
+# Update Foundry (foundryup ensures you have the latest version)
+echo "Updating Foundry..."
+foundryup
 
-  log_message "Removing old libraries..."
-  rm -rf lib/infernet-sdk || error_exit "Failed to remove 'infernet-sdk'."
-  rm -rf lib/forge-std || error_exit "Failed to remove 'forge-std'."
-
-  log_message "Installing Forge and Infernet SDK..."
-  forge install --no-commit foundry-rs/forge-std || error_exit "Failed to install 'forge-std'."
-  forge install --no-commit ritual-net/infernet-sdk || error_exit "Failed to install 'infernet-sdk'."
-
-  log_message "Updating Foundry..."
-  foundryup || error_exit "Failed to update Foundry."
-
-  log_message "Foundry installation complete!"
-}
-
-check_root
-
-log_message "Starting the installation of dependencies..."
-sudo apt install -y make || error_exit "Failed to install make."
-
-install_dependencies
-advise_logout
-
-# Run Foundry installation and updates
-install_foundry
-
+echo "All installations and setups are complete!"
